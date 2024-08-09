@@ -69,6 +69,7 @@ If you have an existing R Setup and familiar with OHDSI Packages then setup the 
 ### Execute ETL
 
 - To begin contributing transformation to the various OMOP tables, go to `etl/pypasar/omop` and choose the appropriate python file
+- <i>SQL can be used as well in the python class</i>
 - Example is available for cdm_source table at `etl/pypasar/omop/cdm_source.py`
 
 
