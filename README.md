@@ -42,9 +42,9 @@ Postgres & Bigquery sql scripts are now stored at this point in time `etl/pypasa
 
 ### Setup Postgres via Docker
 
-- Export envs `source .env`
-- Run Postgres as docker container `docker run --env-file ./env -d --name pasar-postgres -p ${POSTGRES_PORT}:5432 postgres:16-alpine`
-
+- Ensure docker is installed
+- Export envs `source .env` / Copy the value `POSTGRES_PORT` from .env and replace in the next line
+- Run Postgres as docker container `docker run -v pg-pasar-data:/var/lib/postgresql/data --env-file .env -d --name pasar-postgres -p ${POSTGRES_PORT}:5432 postgres:16-alpine`
 
 ### Existing R Setup
 
@@ -82,3 +82,13 @@ If you have an existing R Setup and familiar with OHDSI Packages then setup the 
 - Run `python . etl <omop_table_name>`. 
 	- Example `python . etl cdm_source`
 	- Multiple tables for cdm_source and concept `python . etl cdm_source,concept`. <b>NO SPACES BETWEEN COMMA SEPARTED OMOP Tables</b>
+
+### Cleanup
+
+#### Remove Python environment
+	- Run `deactivate`
+	- Under `etl`, Run `rm -rf pypasarenv`
+	
+#### Remove Docker Container & Volume
+	- Remove container, Run `docker rm -f pasar-postgres`
+	- Remove volume <b>CAUTION - ALL DATA WILL BE LOST!!</b>, Run `docker volume rm pg-pasar-data` 
