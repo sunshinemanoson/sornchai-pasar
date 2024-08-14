@@ -26,8 +26,7 @@ class cdm_source:
         with self.engine.connect() as connection:
             with connection.begin():
                 # Set schema
-                connection.execute(
-                    text(f"SET search_path TO {os.getenv("POSTGRES_OMOP_SCHEMA")}"))
+                connection.execute(text(f'SET search_path TO {os.getenv("POSTGRES_OMOP_SCHEMA")}'))
                 # Insert record
                 connection.execute(text("Truncate table cdm_source"))
 
@@ -35,8 +34,7 @@ class cdm_source:
         with self.engine.connect() as connection:
             with connection.begin():
                 # Set schema
-                connection.execute(
-                    text(f"SET search_path TO {os.getenv("POSTGRES_OMOP_SCHEMA")}"))
+                connection.execute(text(f'SET search_path TO {os.getenv("POSTGRES_OMOP_SCHEMA")}'))
                 # Insert record
                 connection.execute(text("""INSERT INTO cdm_source (
                         cdm_source_name,

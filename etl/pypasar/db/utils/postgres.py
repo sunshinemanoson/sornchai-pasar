@@ -13,7 +13,7 @@ class postgres:
         self.omop_schema = os.getenv("POSTGRES_OMOP_SCHEMA")
         self.omop_db = os.getenv("POSTGRES_DB")
         self.connectable = create_engine(
-            f"postgresql+psycopg2://{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASSWORD")}@{os.getenv("POSTGRES_HOST")}:{os.getenv("POSTGRES_PORT")}/{self.omop_db}")
+            f'postgresql+psycopg2://{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASSWORD")}@{os.getenv("POSTGRES_HOST")}:{os.getenv("POSTGRES_PORT")}/{self.omop_db}')
         self.base_path = "pypasar/db/sql/postgres" if base_path is None else base_path
         self.files = ["ddl.sql",
                       "primary_keys.sql",
@@ -39,8 +39,7 @@ class postgres:
                 escaped_sql = text(file.read())
                 connection.execute(escaped_sql)
                 connection.commit()
-                print(f"Executed {sql_file} for Postgres db {self.omop_db} schema {
-                      self.omop_schema}..")
+                print(f"Executed {sql_file} for Postgres db {self.omop_db} schema {self.omop_schema}..")
 
     def drop_omop_schema(self) -> None:
         with self.connectable.connect() as connection:
