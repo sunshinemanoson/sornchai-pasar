@@ -22,7 +22,7 @@ https://ohdsiorg.sharepoint.com/:x:/s/OHDSIAPAC-2024APACETLProject-Dataanalysis/
 - bash
 - Python >= `v3.10`
 
-<i>For Windows users please adapt the following steps accordingly!</i>
+<i>For Windows users please adapt the following steps accordingly! Recommend to install linux on windows:</i> https://learn.microsoft.com/en-us/windows/wsl/install
 
 ### Setup Python environment
 
