@@ -6,7 +6,7 @@
 ## OMOP
 
 - Version: `5.4`
-- DDL Artifacts: https://github.com/OHDSI/CommonDataModel/tree/main/ddl/5.4/bigquery
+- DDL Artifacts: https://github.com/OHDSI/CommonDataModel/tree/main/ddl/5.4/postgresql
 - Specific Git Commit: https://github.com/OHDSI/CommonDataModel/commit/c1c8e6a4f04e588d72fa9ae5df56b1631559548b
 - Copied files to `etl/db` and removed prefix `@cdmDatabaseSchema.` in those files (since ingestion will happen via SqlAlchemy)
 
@@ -38,7 +38,7 @@ https://ohdsiorg.sharepoint.com/:x:/s/OHDSIAPAC-2024APACETLProject-Dataanalysis/
 
 ### OMOP Database Setup
 
-Postgres & Bigquery sql scripts are now stored at this point in time `etl/pypasar/db/sql` and will likely to change based on usage later
+Postgres sql scripts are now stored at this point in time `etl/pypasar/db/sql` and will likely to change based on usage later
 
 ### Setup Postgres via Docker
 

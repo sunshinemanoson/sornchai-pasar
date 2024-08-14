@@ -3,7 +3,7 @@ import sys
 import traceback
 from dotenv import load_dotenv
 from importlib import import_module
-from pypasar.db.utils import postgres, bigquery
+from pypasar.db.utils import postgres
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -15,11 +15,8 @@ def select_db_dialect(db_dialect):
         case "POSTGRES":
             db = postgres.postgres("pypasar/db/sql/postgres")
             print("Selected POSTGRES Dialect")
-        case "BIGQUERY":
-            db = bigquery.bigquery("pypasar/db/sql/bigquery")
-            print("Selected BIGQUERY Dialect")
         case _:
-            print("Db Dialect must be either Postgres or Bigquery")
+            print("Db Dialect must be Postgres")
     return db
 
 

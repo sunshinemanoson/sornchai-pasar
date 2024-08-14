@@ -3,7 +3,6 @@ import os
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 from ..db.utils.postgres import postgres
-from ..db.utils.bigquery import bigquery
 # Load environment variables from the .env file
 load_dotenv()
 
@@ -12,7 +11,6 @@ class location:
 
     def __init__(self):
         self.engine = postgres().get_engine()  # Get PG Connection
-        # self.engine = bigquery().get_engine()  # Get BQ Connection
 
     def execute(self):
         try:
