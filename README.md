@@ -121,12 +121,12 @@ Host pypasar
 
 1. Once you are in your home folder, refer to this document https://ohdsiorg.sharepoint.com/:p:/s/OHDSIAPAC/ESUGOh6Lza9FvxH1TyaoO7oBlMv_9Iq57tLQ-41V2HUFtA?e=QdjNOP and fork this repo to your org account.
 
-2. Once the repo clone, navigate to the `<username>-pasar` repo
-3. Enter the configuration (<b>No GLOBAL!!</b>)
+2. Once the repo clone is done, navigate to the `<username>-pasar` repo
+3. Enter the following configuration (<b>No GLOBAL!!</b>)
 
 ```
 git config user.name "<username>"
 git config user.email <email>
 ```
 
-4. Follow the document in step 1 to push the branch to remote
+4. Follow the document in step 1 to create a new branch and push to repo.
