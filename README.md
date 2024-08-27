@@ -92,3 +92,41 @@ If you have an existing R Setup and familiar with OHDSI Packages then setup the 
 #### Remove Docker Container & Volume
 - Remove container, Run `docker rm -f pasar-postgres`
 - Remove volume (<b>CAUTION - ALL DATA WILL BE LOST!!</b>), Run `docker volume rm pg-pasar-data` 
+
+## GCP Development
+
+### Setup VM
+
+In the below snippet at <b>Step 3</b>
+1. Replace `<IP>` Based on group in the below snippet
+2. Replace `<username>`
+3. Copy the snippet to `~/.ssh/config` and save the file
+```
+Host pypasar
+    HostName <IP>
+    User <username>
+    IdentityFile ~/.ssh/<username>
+    ControlMaster     auto
+    ControlPath       ~/.ssh/control-%C
+    ControlPersist    yes
+```
+
+4. Copy public and private key files to `~/.ssh` folder
+5. Test on terminal `ssh pypasar`. Should be able to login to home folder, run `pwd`.
+
+6. For remote development https://code.visualstudio.com/docs/remote/ssh
+
+
+### Setup Git repo in the local folder
+
+1. Once you are in your home folder, refer to this document https://ohdsiorg.sharepoint.com/:p:/s/OHDSIAPAC/ESUGOh6Lza9FvxH1TyaoO7oBlMv_9Iq57tLQ-41V2HUFtA?e=QdjNOP and fork this repo to your org account.
+
+2. Once the repo clone, navigate to the `<username>-pasar` repo
+3. Enter the configuration (<b>No GLOBAL!!</b>)
+
+```
+git config user.name "<username>"
+git config user.email `<email>`
+```
+
+4. Follow the document in step 1 to push the branch to remote
