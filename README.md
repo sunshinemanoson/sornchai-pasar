@@ -126,7 +126,7 @@ Host pypasar
 
 ```
 git config user.name "<username>"
-git config user.email `<email>`
+git config user.email <email>
 ```
 
 4. Follow the document in step 1 to push the branch to remote
