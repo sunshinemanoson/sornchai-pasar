@@ -99,7 +99,7 @@ If you have an existing R Setup and familiar with OHDSI Packages then setup the 
 
 In the below snippet at <b>Step 3</b>
 1. Replace `<IP>` Based on group in the below snippet
-2. Replace `<username>`
+2. Replace `<username>` (<i>filename of the private key / mentioned in ETL Development sheet</i>)
 3. Copy the snippet to `~/.ssh/config` and save the file
 ```
 Host pypasar
