@@ -130,3 +130,7 @@ git config user.email <email>
 ```
 
 4. Follow the document in step 1 to create a new branch and push to repo.
+
+### Setup Postgres GUI on Vscode GCP VM
+1. How to browse and Install VS Code extensions: https://code.visualstudio.com/docs/editor/extension-marketplace#_browse-for-extensions
+2. Recommended Postgres GUI extension: https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres
