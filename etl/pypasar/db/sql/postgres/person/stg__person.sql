@@ -6,76 +6,76 @@
 -- DATE        VERS  INITIAL  CHANGE DESCRIPTION
 -- ----------  ----  -------  ----------------------------------------
 -- 2024-08-27  1.00           Initial create
+-- 2024-09-01  2.00           Updated to use DENSE_RANK() for person_id
 --
 -- *******************************************************************
 
--- Select distinct values to ensure no duplicate anon_case_no
-WITH unique AS (
-    SELECT 
-        DISTINCT "anon_case_no" AS "unique_anon_case_no",
-        "gender",
-        "Age_Time_of_Surgery",
-        "operation_startdate",
-        "institution_code",
-        "race"
-    FROM pre_op.char
-), 
--- Rename columns
-naming AS (
-    SELECT 
-        "unique_anon_case_no" AS "person_source_value",
-        "gender" AS "gender_source_value",
-        "race" AS "race_source_value"
-    FROM unique
-), 
--- Map gender and race values to their respective concept IDs
-mapping AS (
-    SELECT
-        "person_source_value",
-        CASE "gender_source_value"
-            WHEN 'MALE' THEN 8507
-            WHEN 'FEMALE' THEN 8532
-            ELSE 0
-        END AS "gender_concept_id",
-        CASE "race"
-            WHEN 'Chinese' THEN 38003579
-            WHEN 'Asian Indian' THEN 38003574
-            WHEN 'Malay' THEN 4028336
-            ELSE 0
-        END AS "race_concept_id"
-    FROM naming
-), 
--- Calculate the year of birth
-computing AS (
-    SELECT
-        "person_source_value",
-        EXTRACT(YEAR FROM "operation_startdate")::INT - "Age_Time_of_Surgery"::INT AS "year_of_birth"
-    FROM naming
-), 
--- Combine the mapped gender and race with the calculated year of birth
-final AS (
-    SELECT 
-        n."person_source_value", 
-        n."gender_source_value", 
-        n."race_source_value",
-        m."gender_concept_id", 
-        m."race_concept_id",
-        c."year_of_birth"
-    FROM naming AS n
-    LEFT JOIN mapping AS m
-      ON n."person_source_value" = m."person_source_value"
-    LEFT JOIN computing AS c
-      ON n."person_source_value" = c."person_source_value"
-)
-
 -- Create the staging view for the person table, assigning a unique person_id
 CREATE VIEW stg__person AS
-SELECT
-    ROW_NUMBER() OVER (ORDER BY "person_source_value") AS "person_id",
-    "gender_concept_id",
-    "year_of_birth",
-    "race_concept_id",
-    "person_source_value",
-    "gender_source_value",
-    "race_source_value"
-FROM final;
+    -- Extract relevant columns from the pre_op.char table
+    WITH source AS (
+        SELECT 
+            anon_case_no AS person_source_value,
+            session_startdate,
+            operation_startdate,
+            age_time_of_surgery,
+            gender AS gender_source_value,
+            race AS race_source_value
+        FROM pre_op.char
+    ),
+    -- Assign a unique person_id to each distinct person_source_value
+    personID AS (
+        SELECT *, ROW_NUMBER() OVER (PARTITION BY person_source_value ORDER BY session_startdate) AS row_num
+        FROM source
+    ), 
+    -- Map gender and race values to their respective concept IDs
+    mapping AS (
+        SELECT
+            person_source_value,
+            CASE gender_source_value
+                WHEN 'MALE' THEN 8507
+                WHEN 'FEMALE' THEN 8532
+                ELSE 0
+            END AS gender_concept_id,
+            CASE race_source_value
+                WHEN 'Chinese' THEN 38003579
+                WHEN 'Indian' THEN 38003574
+                ELSE 0
+            END AS race_concept_id
+        FROM source
+    ), 
+    -- Calculate the year of birth
+    computing AS (
+        SELECT
+            person_source_value,
+            EXTRACT(YEAR FROM TO_DATE(operation_startdate, 'YYYY-MM-DD'))::int - age_time_of_surgery::int AS year_of_birth
+        FROM source
+    ), 
+    -- Combine the mapped gender and race with the calculated year of birth
+    final AS (
+        SELECT 
+            s.person_source_value AS person_source_value,
+            s.gender_source_value AS gender_source_value,
+            s.race_source_value AS race_source_value,
+            DENSE_RANK() OVER (ORDER BY pid.person_source_value) AS person_id,
+            m.gender_concept_id AS gender_concept_id,
+            m.race_concept_id AS race_concept_id,
+            c.year_of_birth AS year_of_birth
+        FROM source s
+        JOIN personID AS pid
+            ON s.person_source_value = pid.person_source_value
+        JOIN mapping AS m
+            ON s.person_source_value = m.person_source_value
+        JOIN computing AS c
+            ON s.person_source_value = c.person_source_value
+        WHERE pid.row_num = 1
+    )
+    SELECT
+        person_id,
+        gender_concept_id,
+        year_of_birth,
+        race_concept_id,
+        person_source_value,
+        gender_source_value,
+        race_source_value
+    FROM final;
