@@ -21,7 +21,7 @@ CREATE VIEW stg__person AS
             age_time_of_surgery,
             gender AS gender_source_value,
             race AS race_source_value
-        FROM pre_op.char
+        FROM {PRE_OP_SCHEMA}.char
     ),
     -- Assign a unique person_id to each distinct person_source_value
     personID AS (
