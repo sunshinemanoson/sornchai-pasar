@@ -1,4 +1,4 @@
-# Table name: person
+# Table name: Person
 
 ![ODSHI APAC 2024 _ ETL Team](https://github.com/user-attachments/assets/afbca30b-c915-46d1-9b44-3b81787352a6)
 
