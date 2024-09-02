@@ -7,11 +7,11 @@
 -- ----------  ----  -------  ----------------------------------------
 -- 2024-08-27  1.00           Initial create
 -- 2024-09-01  2.00           Updated to use DENSE_RANK() for person_id
---
+-- 2024-09-02  3.00           Updated the schema name
 -- *******************************************************************
 
 -- Create the staging view for the person table, assigning a unique person_id
-CREATE VIEW stg__person AS
+CREATE VIEW {OMOP_SCHEMA}.stg__person AS
     -- Extract relevant columns from the pre_op.char table
     WITH source AS (
         SELECT 
