@@ -8,6 +8,7 @@
 -- 2024-08-27  1.00           Initial create
 -- 2024-09-01  2.00           Updated to use DENSE_RANK() for person_id
 -- 2024-09-02  3.00           Updated the schema name
+-- 2024-09-04  4.00           Updated race_concept_id
 -- *******************************************************************
 
 -- Create the staging view for the person table, assigning a unique person_id
@@ -40,6 +41,8 @@ CREATE VIEW {OMOP_SCHEMA}.stg__person AS
             CASE race_source_value
                 WHEN 'Chinese' THEN 38003579
                 WHEN 'Indian' THEN 38003574
+                WHEN 'Malay' THEN 38003587
+                WHEN 'Singaporean' THEN 38003596
                 ELSE 0
             END AS race_concept_id
         FROM source
