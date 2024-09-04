@@ -33,7 +33,7 @@ CREATE VIEW {OMOP_SCHEMA}.stg__person AS
     ),
     -- Assign a unique person_id to each distinct person_source_value
     filteredSource AS (
-        SELECT *, ROW_NUMBER() OVER () AS person_id
+        SELECT *, ROW_NUMBER() OVER (ORDER BY person_source_value) AS person_id -- Based on ordering by `person_source_value`
         FROM source s
         WHERE s.row_num = 1
     ), 
