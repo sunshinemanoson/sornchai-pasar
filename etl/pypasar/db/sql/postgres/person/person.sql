@@ -7,10 +7,10 @@
 -- ----------  ----  -------  ----------------------------------------
 -- 2024-08-27  1.00           Initial create
 -- 2024-09-01  2.00           Insert data into person table from staging view
---
+-- 2024-09-04  3.00           Updated the schema name
 -- *******************************************************************
 
-INSERT INTO person
+INSERT INTO {OMOP_SCHEMA}.person
 (
     person_id,
     gender_concept_id,
@@ -50,4 +50,4 @@ SELECT
     0 AS race_source_concept_id,
     NULL AS ethnicity_source_value,
     NULL AS ethnicity_source_concept_id
-FROM stg__person;
+FROM {OMOP_SCHEMA}.stg__person;
