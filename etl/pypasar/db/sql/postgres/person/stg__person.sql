@@ -25,7 +25,7 @@ CREATE VIEW {OMOP_SCHEMA}.stg__person AS
             ROW_NUMBER() OVER (
                 PARTITION BY anon_case_no 
                 ORDER BY 
-                    session_startdate DESC, -- Primary sort on session_startdate
+                    session_startdate, -- Primary sort on session_startdate
                     CASE WHEN gender IS NOT NULL THEN 0 ELSE 1 END, -- Prioritize non-null gender
                     CASE WHEN race IS NOT NULL THEN 0 ELSE 1 END -- Prioritize non-null race
             ) AS row_num
@@ -33,7 +33,7 @@ CREATE VIEW {OMOP_SCHEMA}.stg__person AS
     ),
     -- Assign a unique person_id to each distinct person_source_value
     filteredSource AS (
-        SELECT *, ROW_NUMBER() OVER (ORDER BY person_source_value) AS person_id -- Based on ordering by `person_source_value`
+        SELECT *, ROW_NUMBER() OVER (ORDER BY session_startdate, person_source_value) AS person_id -- Based on ordering by `person_source_value`
         FROM source s
         WHERE s.row_num = 1
     ), 
@@ -79,7 +79,7 @@ CREATE VIEW {OMOP_SCHEMA}.stg__person AS
             ON s.person_source_value = m.person_source_value
         JOIN computing AS c
             ON s.person_source_value = c.person_source_value
-        WHERE fs.row_num = 1
+        ORDER BY fs.person_id
     )
     SELECT
         person_id,
