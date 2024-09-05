@@ -44,7 +44,7 @@ class person:
         # Define placeholder to environment variable mappings
         placeholder_mapping = {
             "{OMOP_SCHEMA}": os.getenv("POSTGRES_OMOP_SCHEMA"),
-            "{PRE_OP_SCHEMA}": os.getenv("POSTGRES_SOURCE_PRE_OP_SCHEMA")
+            "{PREOP_SCHEMA}": os.getenv("POSTGRES_SOURCE_PREOP_SCHEMA")
         }
         
         with self.engine.connect() as connection:
