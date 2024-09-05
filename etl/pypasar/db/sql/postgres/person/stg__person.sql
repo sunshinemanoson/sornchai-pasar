@@ -12,7 +12,7 @@
 -- *******************************************************************
 
 -- Create the staging view for the person table, assigning a unique person_id
-CREATE VIEW {OMOP_SCHEMA}.stg__person AS
+CREATE OR REPLACE VIEW {OMOP_SCHEMA}.stg__person AS
     -- Extract relevant columns from the pre_op.char table
     WITH source AS (
         SELECT 
@@ -29,11 +29,12 @@ CREATE VIEW {OMOP_SCHEMA}.stg__person AS
                     CASE WHEN gender IS NOT NULL THEN 0 ELSE 1 END, -- Prioritize non-null gender
                     CASE WHEN race IS NOT NULL THEN 0 ELSE 1 END -- Prioritize non-null race
             ) AS row_num
-        FROM {PRE_OP_SCHEMA}.char
+        FROM {PREOP_SCHEMA}.char
     ),
     -- Assign a unique person_id to each distinct person_source_value
     filteredSource AS (
-        SELECT *, ROW_NUMBER() OVER (ORDER BY session_startdate, person_source_value) AS person_id -- Based on ordering by `person_source_value`
+        -- Assign person_id by selecting from the earliest for each person_source_value
+        SELECT *, ROW_NUMBER() OVER (ORDER BY session_startdate, person_source_value) AS person_id
         FROM source s
         WHERE s.row_num = 1
     ), 
@@ -59,26 +60,24 @@ CREATE VIEW {OMOP_SCHEMA}.stg__person AS
     computing AS (
         SELECT
             person_source_value,
-            EXTRACT(YEAR FROM TO_DATE(operation_startdate, 'YYYY-MM-DD'))::int - age_time_of_surgery::int AS year_of_birth
+            EXTRACT(YEAR FROM operation_startdate)::int - age_time_of_surgery::int AS year_of_birth
         FROM filteredSource
     ), 
     -- Combine the mapped gender and race with the calculated year of birth
     final AS (
         SELECT 
-            s.person_source_value AS person_source_value,
-            s.gender_source_value AS gender_source_value,
-            s.race_source_value AS race_source_value,
+            fs.person_source_value AS person_source_value,
+            fs.gender_source_value AS gender_source_value,
+            fs.race_source_value AS race_source_value,
             fs.person_id AS person_id,
             m.gender_concept_id AS gender_concept_id,
             m.race_concept_id AS race_concept_id,
             c.year_of_birth AS year_of_birth
-        FROM source s
-        JOIN filteredSource AS fs
-            ON s.person_source_value = fs.person_source_value AND s.session_startdate = fs.session_startdate
+        FROM filteredSource AS fs
         JOIN mapping AS m
-            ON s.person_source_value = m.person_source_value
+            ON fs.person_source_value = m.person_source_value
         JOIN computing AS c
-            ON s.person_source_value = c.person_source_value
+            ON fs.person_source_value = c.person_source_value
         ORDER BY fs.person_id
     )
     SELECT
