@@ -39,7 +39,7 @@ SELECT
     visit_detail_end_date,
     visit_detail_end_datetime,
     visit_detail_type_concept_id,  -- Registry Concept ID
-    NULL AS provider_id,
+    provider_id,
     NULL AS care_site_id,
     'ICU' AS visit_detail_source_value,
     NULL AS visit_detail_source_concept_id,

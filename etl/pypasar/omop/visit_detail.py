@@ -46,7 +46,8 @@ class visit_detail:
         placeholder_mapping = {
             "{OMOP_SCHEMA}": os.getenv("POSTGRES_OMOP_SCHEMA"),
             "{POSTOP_SCHEMA}": os.getenv("POSTGRES_SOURCE_POSTOP_SCHEMA"),
-            "{PREOP_SCHEMA}": os.getenv("POSTGRES_SOURCE_PREOP_SCHEMA")
+            "{PREOP_SCHEMA}": os.getenv("POSTGRES_SOURCE_PREOP_SCHEMA"),
+            "{INTRAOP_SCHEMA}": os.getenv("POSTGRES_SOURCE_INTRAOP_SCHEMA")
         }
         
         with self.engine.connect() as connection:
