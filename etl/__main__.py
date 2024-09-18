@@ -11,12 +11,11 @@ load_dotenv()
 
 def select_db_dialect(db_dialect):
     db = None
-    match db_dialect:
-        case "POSTGRES":
-            db = postgres.postgres("pypasar/db/sql/postgres")
-            print("Selected POSTGRES Dialect")
-        case _:
-            print("Db Dialect must be Postgres")
+    if db_dialect == "POSTGRES":
+        db = postgres.postgres("pypasar/db/sql/postgres")
+        print("Selected POSTGRES Dialect")
+    else:
+        print("Db Dialect must be Postgres")
     return db
 
 
@@ -24,14 +23,13 @@ def db(option):
     db_dialect = os.getenv("DB_DIALECT")
     db = select_db_dialect(db_dialect)
     if db is not None:
-        match option:
-            case "create_omop_schema":
-                db.create_omop_schema()
-            case "drop_omop_schema":
-                db.drop_omop_schema()
-            case _:
-                print(
-                    "Db argument must be either create_omop_schema or drop_omop_schema")
+        if option == "create_omop_schema":
+            db.create_omop_schema()
+        elif option == "drop_omop_schema":
+            db.drop_omop_schema()
+        else:
+            print(
+                "Db argument must be either create_omop_schema or drop_omop_schema")
 
 
 def etl(tables):
@@ -87,14 +85,13 @@ def etl(tables):
 # Entrypoint
 try:
     entrypoint = sys.argv[1]
-    match entrypoint:
-        case "db":
-            options = None if len(sys.argv) <= 2 else sys.argv[2]
-            db(options)
-        case "etl":
-            tables = None if len(sys.argv) <= 2 else sys.argv[2]
-            etl(tables)
-        case _:
-            print("Entrypoint must be either db or etl")
+    if entrypoint == "db":
+        options = None if len(sys.argv) <= 2 else sys.argv[2]
+        db(options)
+    elif entrypoint == "etl":
+        tables = None if len(sys.argv) <= 2 else sys.argv[2]
+        etl(tables)
+    else:
+        print("Entrypoint must be either db or etl")
 except Exception as err:
     traceback.print_exc()

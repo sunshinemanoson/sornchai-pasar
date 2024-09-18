@@ -11,6 +11,7 @@ class person:
 
     def __init__(self):
         self.engine = postgres().get_engine()  # Get PG Connection
+        print(f"BASE_PATH: {os.getenv('BASE_PATH')}")
 
     def execute(self):
         try:
