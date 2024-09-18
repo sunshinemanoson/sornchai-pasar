@@ -34,7 +34,6 @@ CREATE OR REPLACE VIEW {OMOP_SCHEMA}.stg__visit_detail AS
             ROW_NUMBER() OVER (PARTITION BY session_id,  anon_case_no) AS unique_visit_occurrence_id,
             ROW_NUMBER() OVER (ORDER BY session_startdate, po_id) AS unique_visit_detail_id
         FROM source s
-        WHERE s.row_num = 1
     ),
     mapping AS (
         SELECT
