@@ -16,11 +16,7 @@ CREATE OR REPLACE VIEW {OMOP_SCHEMA}.stg__visit_detail AS
             po.operation_endtime,
             po.icu_discharge_date,
             po.icu_discharge_time,
-            po.icu_location,
-            ROW_NUMBER() OVER (
-                PARTITION BY po.anon_case_no 
-                ORDER BY po.session_startdate
-            ) AS row_num
+            po.icu_location
         FROM {POSTOP_SCHEMA}.icu po
         LEFT JOIN {PREOP_SCHEMA}.char pre 
             ON pre.anon_case_no = po.anon_case_no
