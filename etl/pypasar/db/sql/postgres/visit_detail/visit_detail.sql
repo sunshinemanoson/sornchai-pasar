@@ -39,7 +39,7 @@ SELECT
     visit_detail_end_date,
     visit_detail_end_datetime,
     visit_detail_type_concept_id,  -- Registry Concept ID
-    provider_id,
+    NULL AS provider_id,
     NULL AS care_site_id,
     'ICU' AS visit_detail_source_value,
     NULL AS visit_detail_source_concept_id,
@@ -49,5 +49,5 @@ SELECT
     NULL AS discharged_to_concept_id,
     NULL AS preceding_visit_detail_id,
     NULL AS parent_visit_detail_id,
-    visit_occurrence_id
+    NULL AS visit_occurrence_id
 FROM {OMOP_SCHEMA}.stg__visit_detail
